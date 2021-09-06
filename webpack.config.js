@@ -1,12 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    assetModuleFilename: 'assets/[hash].[ext]',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -35,9 +36,13 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           'css-loader',
-          'sass-loader'
-        ]
-      }
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/,
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [
@@ -45,9 +50,8 @@ module.exports = {
       template: './public/index.html',
       filename: './index.html',
     }),
-    new MiniCssExtractPlugin ({
-      filename: 'assets/[name].css'
-    }
-  )
+    new MiniCssExtractPlugin({
+      filename: 'assets/[name].css',
+    }),
   ],
 };
