@@ -6,46 +6,48 @@ import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 import Footer from '../components/Footer';
 import '../assets/styles/App.scss';
+import useInitialState from '../hooks/useInitialState';
 
 const API = 'http://localhost:3000/initialState';
 
 const App = () => {
-  const [videos, setVideos] = useState([]);
+  const initialState = useInitialState(API);
 
-  useEffect(() => {
-    fetch(API)
-      .then((response) => response.json())
-      .then((data) => setVideos(data));
-  }, []);
-
-  console.log(videos);
-
-  return (
+  return initialState.length === 0 ? (
+    <h1>Loading...</h1>
+  ) : (
     <div className='App'>
       <Header />
       <Search />
+      {initialState.mylist.length > 0 && (
+        <Categories title='Mi lista'>
+          <Carousel>
+            {initialState.mylist.map((item) => (
+              <CarouselItem key={item.id} {...item} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
 
-      <Categories title='Mi lista' />
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
+      {initialState.trends.length > 0 && (
+        <Categories title='Tendencias'>
+          <Carousel>
+            {initialState.trends.map((item) => (
+              <CarouselItem key={item.id} {...item} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
 
-      <Categories title='Tendencias' />
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
-
-      <Categories title='Originales' />
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
+      {initialState.originals.length > 0 && (
+        <Categories title='Originales'>
+          <Carousel>
+            {initialState.originals.map((item) => (
+              <CarouselItem key={item.id} {...item} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
 
       <Footer />
     </div>
