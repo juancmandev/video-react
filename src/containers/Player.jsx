@@ -8,9 +8,11 @@ import NotFound from './NotFound';
 const Player = (props) => {
   const { id } = props.match.params;
   const hasPlaying = Object.keys(props.playing).length > 0;
+
   useEffect(() => {
     props.getVideoSource(id);
   }, []);
+  
   return !hasPlaying ? (
     <NotFound />
   ) : (
